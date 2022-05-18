@@ -1,0 +1,308 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Thống kê</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script
+src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
+</script> 
+<script>
+      function nhapHangVai(dat,b)
+    {
+        var request = new XMLHttpRequest();
+        var urlHere = "https://api.thingspeak.com/update?";
+        
+        urlHere = urlHere + "api_key=PS3SEAZCJ55TCX3H&field1="+ dat;
+        request.open('GET', urlHere, true);
+        request.send();
+        setTimeout(function(){  
+          b();
+        }, 5000); 
+    }
+  function nhapHangChi(dat,b)
+    {
+        var request = new XMLHttpRequest();
+        var urlHere = "https://api.thingspeak.com/update?";
+        
+        urlHere = urlHere + "api_key=PS3SEAZCJ55TCX3H&field2="+ dat;
+        request.open('GET', urlHere, true);
+        request.send();
+        setTimeout(function(){  
+          b();
+        }, 5000); 
+    }
+    function nhapHangNut(dat,b)
+    {
+        var request = new XMLHttpRequest();
+        var urlHere = "https://api.thingspeak.com/update?";
+        
+        urlHere = urlHere + "api_key=PS3SEAZCJ55TCX3H&field3="+ dat;
+        request.open('GET', urlHere, true);
+        request.send();
+        setTimeout(function(){  
+          b();
+        }, 5000); 
+    }
+    function xuatHang(dat,b)
+    {
+        var request = new XMLHttpRequest();
+        var urlHere = "https://api.thingspeak.com/update?";
+        urlHere = urlHere + "api_key=PS3SEAZCJ55TCX3H&field4="+ dat;
+        
+        if (parseInt(dat)<=tonKho) {
+          request.open('GET', urlHere, true);
+          request.send();          
+        }else{
+          alert("Hàng không đủ để xuất!");
+        }
+        setTimeout(function(){
+          b();
+        },5000);
+    }
+  function thongKe()
+    {
+        var request = new XMLHttpRequest();
+        var urlHere = "https://api.thingspeak.com/update";
+        urlHere = "https://api.thingspeak.com/channels/1711088/feeds.json";
+        request.open('GET', urlHere, true);
+        request.onload = function() {
+            if (request.status == 200) {
+                var data = JSON.parse(request.responseText);
+                //console.log(data);
+                var length = data.feeds.length;  //kich thuoc du lieu
+                //loc bo cac phan tu null
+                dataNhapVai = new Array();
+                dataNhapChi = new Array();
+                dataNhapNut = new Array();
+                dataXuat = new Array();
+                for(i=0;i<length;i++){
+                  if (data.feeds[i].field1 != null){
+                    dataNhapVai.push(data.feeds[i].field1);
+                  }
+                  if (data.feeds[i].field1 != null){
+                    dataNhapChi.push(data.feeds[i].field2);
+                  }
+                  if (data.feeds[i].field1 != null){
+                    dataNhapNut.push(data.feeds[i].field3);
+                  }
+                  if (data.feeds[i].field2 != null){
+                    dataXuat.push(data.feeds[i].field4);
+                  }
+                }
+                // hiển thị số lượng tồn kho
+                tongNhapVai=0, tongNhapChi=0, tongNhapNut=0, tongXuat=0, tonKho=0;
+                //tính tổng xuất
+                for(i=0;i<dataXuat.length;i++){
+                  tongXuat += parseInt(dataXuat[i]);
+                }
+                //tính tổng nhập
+                for(i=0;i<dataNhapVai.length;i++){
+                  tongNhapVai += parseInt(dataNhapVai[i]);
+                }for(i=0;i<dataNhapChi.length;i++){
+                  tongNhapChi += parseInt(dataNhapChi[i]);
+                }
+                for(i=0;i<dataNhapNut.length;i++){
+                  tongNhapNut += parseInt(dataNhapNut[i]);
+                }
+                //tính tồn kho
+                tonKho = (tongNhapVai + tongNhapChi+ tongNhapNut)/3 - tongXuat;
+                document.getElementById("thongke").innerHTML = "Tổng số sản phẩm đang trong kho:"+tonKho;
+                //Ve bieu đồ nhập xuất
+               
+            } else {
+            // We reached our target server, but it returned an error
+            }
+        };
+        request.send();
+
+        
+        //request.open('GET', urlHere, true);
+        //request.send();
+    }
+</script> 
+<style>
+
+body {
+  background-color: #FFF8DC;
+  margin: 200;
+  font-family: Times new roman , sans-serif;
+  font-size: 100%;
+}
+
+</style>
+<body>
+<div class="w3-container" style="background-color:#8B4513";>
+  <h1 align="center" >
+    <font face="times new roman"; color="white";>
+    GIỚI THIỆU THÔNG TIN CÁC THÀNH PHẦN NGUYÊN LIỆU NHẬP
+</font> 
+  <br>
+</h1>
+  <p align="center">
+<font face="times new roman"; color="white";>
+  Thông tin về nguyên liệu của quy trình phân phối chuỗi cung ứng may mặc áo sơ mi</p> 
+</font>
+<br>
+</div>
+<div class="w3-row-padding">
+  <div class="w3-third">
+    <h2>
+ <font face="times new roman">
+    NGUYÊN LIỆU VẢI
+    </font> 
+  <br>
+  </h2>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+<p>Hình ảnh về nguyên liệu vải được nhập:</p>
+<img src="https://thomasnguyentailor.com/wp-content/uploads/2020/02/kate.jpg" alt="Pineapple" width="300" height="350">
+    <p><em> Chất liệu vải sồi thiên nhiên - loại vải may áo sơ mi cao cấp nhất. Vải được lựa chọn có khả năng thấm hút cao với mặt vải sáng mịn, thoáng khí.</em></p>
+<form>
+<fieldset>
+<legend>Thông tin cần nhập </legend>
+<ol>
+<li>
+<b>Ngày nhập hàng:</b><br>
+<input type="text" name="Ngày sản xuất">
+</li>
+<br>
+<li>
+<b>Số lượng:</b><br>
+<input type="text" name="Số lượng">
+</li>
+<br>
+<li>
+<b>Đơn giá:</b><br>
+<input type="text" name="Đơn giá">
+<br><br>
+<input type="button" value="Nhập">
+</li>
+</ol>
+</fieldset>
+</form>
+  </div>
+  <div class="w3-third">
+    <h2>
+ <font face="times new roman">
+    NGUYÊN LIỆU CHỈ
+    </font> 
+  <br>
+  </h2>
+<p>Hình ảnh về nguyên liệu chỉ được nhập:</p>
+<img src="http://hocmay.vn/wp-content/uploads/2018/05/chi-polyester.jpg" alt="Pineapple" width="300" height="350">
+    <p><em>Chỉ sử dụng chất liệu chính từ sợi 60/3. Đây là chất liệu đã được kiểm nghiệm an toàn tuyệt đối cho sức khỏe người dùng, thân thiện với môi trường.</em></p> 
+<form>
+<fieldset>
+<legend>Thông tin cần nhập </legend>
+<ol>
+<li>
+<b>Ngày nhập hàng:</b><br>
+<input type="text" name="Ngày sản xuất">
+</li>
+<br>
+<li>
+<b>Số lượng:</b><br>
+<input type="text" name="Số lượng">
+</li>
+<br>
+<li>
+<b>Đơn giá:</b><br>
+<input type="text" name="Đơn giá">
+<br><br>
+<input type="button" value="Nhập">
+</li>
+</ol>
+</fieldset>
+</form>
+  </div>
+  <div class="w3-third">
+<h2>
+ <font face="times new roman">
+    NGUYÊN LIỆU NÚT
+    </font> 
+  <br>
+  </h2>
+<p>Hình ảnh về nguyên liệu nút áo được nhập:</p>
+<img src="https://cf.shopee.vn/file/81ea6f1457bf6e0c6e855315acc5beb3" alt="Pineapple" width="300" height="350">
+    <p><em>Nút áo sơ mi được làm bằng nhựa Polyester với đa dạng loại khác nhau: nút phẳng, nút cong, nút có vành, nút cóc sọc,...</em></p>
+<form>
+<fieldset>
+<legend>Thông tin cần nhập </legend>
+<ol>
+<li>
+<b>Ngày nhập hàng:</b><br>
+<input type="text" name="Ngày sản xuất">
+</li>
+<br>
+<li>
+<b>Số lượng:</b><br>
+<input type="text" name="Số lượng">
+</li>
+<br>
+<li>
+<b>Đơn giá:</b><br>
+<input type="text" name="Đơn giá">
+<br><br>
+<input type="button" value="Nhập">
+</li>
+</ol>
+</fieldset>
+</form>
+<div class="w3-container" style="background-color:#8B4513";>
+  <h1 align="center" >
+    <font face="times new roman"; color="white";>
+    THÔNG TIN CÁC THÀNH PHẨM XUẤT
+</font> 
+  <br>
+</h1>
+  <p align="center">
+<font face="times new roman"; color="white";>
+  Thông tin về thành phẩm xuất của quy trình phân phối chuỗi cung ứng may mặc áo sơ mi</p> 
+</font>
+<br>
+</div>
+<div class="w3-row-padding">
+  <div class="w3-third">
+    <h2>
+ <font face="times new roman">
+    ÁO SƠ MI 
+    </font> 
+  <br>
+  </h2>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+<p>Hình ảnh về thành phẩm xuất áo sơ mi :</p>
+<img src="https://hubi.vn/wp-content/uploads/2021/01/IMG_7049.jpg" alt="Pineapple" width="400" height="400">
+    <p><em>Mang phong cách lịch sự, nhã nhẵn phù hợp với nhiều lứa tuổi và được giới trẻ hiện đại ưa thích.</em></p>
+<form>
+<fieldset>
+<legend>Thông tin cần xuất </legend>
+<ol>
+<li>
+<b>Ngày xuất hàng:</b><br>
+<input type="text" name="Ngày sản xuất">
+</li>
+<br>
+<li>
+<b>Số lượng:</b><br>
+<input type="text" name="Số lượng">
+</li>
+<br>
+<li>
+<b>Đơn giá:</b><br>
+<input type="text" name="Đơn giá">
+<br><br>
+<input type="button" value="Xuất">
+</li>
+</ol>
+</fieldset>
+</form>
+  </div>
+
+  <div class="w3-third">
+    <h2>
+ <font face="times new roman">
+  </div>
+</div>
+</body>
+</html>
